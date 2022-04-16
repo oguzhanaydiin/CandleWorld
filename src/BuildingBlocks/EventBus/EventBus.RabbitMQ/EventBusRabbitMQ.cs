@@ -26,7 +26,7 @@ namespace EventBus.RabbitMQ
                     ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                 });
 
-                connectionFactory = JsonConvert.DeserializeObject<ConnectionFactory>(connJson);
+                connectionFactory = JsonConvert.DeserializeObject<ConnectionFactory>(connJson);  //REFACTOR - DEBUG
             }
             else
             {

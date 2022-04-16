@@ -1,5 +1,6 @@
 ﻿using EventBus.Base.Abstraction;
 using EventBus.UnitTest.Events.Events;
+using System.Threading.Tasks;
 
 namespace EventBus.UnitTest.Events.EventHandlers
 {
