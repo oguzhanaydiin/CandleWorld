@@ -35,9 +35,10 @@ namespace EventBus.RabbitMQ
 
             persistentConnection = new RabbitMQPersistentConnection(connectionFactory, config.ConnectionRetryCount);
 
-            consumerChannel = CreateConsumerChannel();
+            consumerChannel = CreateConsumerChannel();  //burada bir model olusturulur, model üstünde exchange belirtilir [topic name, type (direct gibi)]
 
             SubsManager.OnEventRemoved += SubsManager_OnEventRemoved;
+
         }
 
         private void SubsManager_OnEventRemoved(object? sender, string eventName)
