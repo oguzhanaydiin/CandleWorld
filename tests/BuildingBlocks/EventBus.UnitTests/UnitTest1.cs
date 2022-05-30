@@ -3,16 +3,14 @@ using EventBus.Base.Abstraction;
 using EventBus.Factory;
 using EventBus.UnitTest.Events.EventHandlers;
 using EventBus.UnitTest.Events.Events;
-using EventBus.UnitTests.Configs;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using RabbitMQ.Client;
-using System.Threading.Tasks;
 
 namespace EventBus.UnitTests
 {
-    internal class AzureServiceBusTests
+    public class Tests
     {
         private ServiceCollection services;
 
@@ -24,11 +22,28 @@ namespace EventBus.UnitTests
         }
 
         [Test]
-        public void Subscribe_event_on_azure_test()
+        public void Subscribe_event_on_rabbitmq_test()
         {
             services.AddSingleton<IEventBus>(sp =>
             {
-                return EventBusFactory.Create(new AzureServiceBusConfig(), sp);
+                EventBusConfig config = new()
+                {
+                    ConnectionRetryCount = 5,
+                    SubscriberClientAppName = "EventBus.UnitTest",
+                    DefaultTopicName = "CandleWorldTopicName",
+                    EventBusType = EventBusType.RabbitMQ,
+                    EventNameSuffix = "IntegrationEvent",
+                    /*Connection = new ConnectionFactory()
+                    {
+                        HostName = "localhost",
+                        Port = 5672,
+                        UserName = "guest",
+                        Password = "guest"
+
+                    }*/
+                };
+
+                return EventBusFactory.Create(config, sp);
             });
             var serviceProvider = services.BuildServiceProvider();
 
@@ -38,44 +53,8 @@ namespace EventBus.UnitTests
             eventBus.Subscribe<OrderCreatedIntegrationEvent, OrderCreatedIntegrationEventHandler>();
             eventBus.UnSubscribe<OrderCreatedIntegrationEvent, OrderCreatedIntegrationEventHandler>();
 
-
+            //rabbitmq-plugins enable rabbitmq-management
             Assert.Pass();
         }
-
-        [Test]
-        public void Send_message_to_azure_test()
-        {
-            services.AddSingleton<IEventBus>(sp =>
-            {
-                return EventBusFactory.Create(new AzureServiceBusConfig(), sp);
-            });
-
-            var serviceProvider = services.BuildServiceProvider();
-
-            var eventBus = serviceProvider.GetRequiredService<IEventBus>();
-
-            eventBus.Publish(new OrderCreatedIntegrationEvent(1));
-
-        }
-
-        [Test]
-        public void Consume_message_on_azure_test()
-        {
-            services.AddSingleton<IEventBus>(sp =>
-            {
-                return EventBusFactory.Create(new AzureServiceBusConfig(), sp);
-            });
-            var serviceProvider = services.BuildServiceProvider();
-
-            var eventBus = serviceProvider.GetRequiredService<IEventBus>();
-
-            eventBus.Subscribe<OrderCreatedIntegrationEvent, OrderCreatedIntegrationEventHandler>();
-
-            Task.Delay(2000).Wait();
-
-            Assert.Pass();
-        }
-
-
     }
 }
