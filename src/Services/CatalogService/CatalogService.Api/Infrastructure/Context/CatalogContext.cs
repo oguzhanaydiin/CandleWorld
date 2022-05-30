@@ -22,5 +22,4 @@ public class CatalogContext : DbContext
         builder.ApplyConfiguration(new CatalogItemEntityTypeConfiguration());
         builder.ApplyConfiguration(new CatalogTypeEntityTypeConfiguration());
     }
-
 }

@@ -1,4 +1,4 @@
-﻿CatalogType
+﻿﻿CatalogType
 Mug
 T-Shirt
 Sheet

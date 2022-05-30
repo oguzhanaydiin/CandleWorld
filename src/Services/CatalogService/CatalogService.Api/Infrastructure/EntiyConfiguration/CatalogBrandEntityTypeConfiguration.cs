@@ -3,23 +3,25 @@ using CatalogService.Api.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CatalogService.Api.Infrastructure.EntiyConfiguration
+namespace CatalogService.Api.Infrastructure.EntiyConfiguration;
+
+public class CatalogBrandEntityTypeConfiguration : IEntityTypeConfiguration<CatalogBrand>
 {
-    public class CatalogBrandEntityTypeConfiguration : IEntityTypeConfiguration<CatalogBrand>
+    public void Configure(EntityTypeBuilder<CatalogBrand> builder)
     {
-        public void Configure(EntityTypeBuilder<CatalogBrand> builder)
-        {
-            builder.ToTable("CatalogBrand", CatalogContext.DEFAULT_SCHEMA);
+        //Schema.Table
+        builder.ToTable("CatalogBrand", CatalogContext.DEFAULT_SCHEMA);
 
-            builder.HasKey(i => i.Id);
+        //configure the primary key
+        builder.HasKey(i => i.Id);
 
-            builder.Property(i => i.Id)
-                .UseHiLo("catalog_brand_hilo")
-                .IsRequired();
+        //generate value for the id
+        builder.Property(i => i.Id)
+            .UseHiLo("catalog_brand_hilo")
+            .IsRequired();
 
-            builder.Property(b => b.Brand)
-                .IsRequired()
-                .HasMaxLength(100);
-        }
+        builder.Property(i => i.Brand)
+            .IsRequired()
+            .HasMaxLength(100);
     }
 }

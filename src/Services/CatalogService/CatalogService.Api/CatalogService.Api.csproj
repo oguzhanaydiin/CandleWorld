@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
-		<Nullable>enable</Nullable>
+		<Nullable>disable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>
 
@@ -15,10 +15,6 @@
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
 
 		<PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Folder Include="Controllers\" />
 	</ItemGroup>
 
 </Project>

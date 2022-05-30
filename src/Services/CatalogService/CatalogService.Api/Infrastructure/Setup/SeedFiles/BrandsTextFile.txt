@@ -1,6 +1,6 @@
-﻿CatalogBrand
+﻿﻿CatalogBrand
 Azure
-.Net
+.NET
 Visual Studio
 SQL Server
 Other

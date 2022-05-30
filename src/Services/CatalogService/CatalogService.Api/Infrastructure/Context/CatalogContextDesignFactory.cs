@@ -1,14 +1,16 @@
-﻿using CatalogService.Api.Infrastructure.Context;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
-public class CatalogContextDesignFactory : IDesignTimeDbContextFactory<CatalogContext>
+namespace CatalogService.Api.Infrastructure.Context
 {
-    public CatalogContext CreateDbContext(string[] args)
+    public class CatalogContextDesignFactory : IDesignTimeDbContextFactory<CatalogContext>
     {
-        var optionsBuilder = new DbContextOptionsBuilder<CatalogContext>()
-            .UseSqlServer("Data Source=c_sqlserver;Initial Catalog=catalog;Persist Security Info=True;User ID=sa;Password=Salih123!");
+        public CatalogContext CreateDbContext(string[] args)
+        {
+            var optionsBuilder = new DbContextOptionsBuilder<CatalogContext>()
+                .UseSqlServer("Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog=catalog;Integrated Security=True");
 
-        return new CatalogContext(optionsBuilder.Options);
+            return new CatalogContext(optionsBuilder.Options);
+        }
     }
 }

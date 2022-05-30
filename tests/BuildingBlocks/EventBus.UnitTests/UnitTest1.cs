@@ -6,7 +6,6 @@ using EventBus.UnitTest.Events.Events;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
-using RabbitMQ.Client;
 
 namespace EventBus.UnitTests
 {

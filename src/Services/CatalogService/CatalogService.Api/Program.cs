@@ -1,25 +1,34 @@
-var builder = WebApplication.CreateBuilder(args);
+using CatalogService.Api.Extensions;
+using CatalogService.Api.Infrastructure.Context;
+using Microsoft.AspNetCore;
 
-// Add services to the container.
+namespace CatalogService.Api;
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+public class Program
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    public static void Main(string[] args)
+    {
+        var hostBuilder = CreateHostBuilder(args);
+
+        hostBuilder.MigrateDbContext<CatalogContext>((context, services) =>
+        {
+            var env = services.GetService<IWebHostEnvironment>();
+            var logger = services.GetService<ILogger<CatalogContextSeed>>();
+
+            new CatalogContextSeed()
+                .SeedAsync(context, env, logger)
+                .Wait();
+        });
+
+        hostBuilder.Run();
+    }
+
+    static IWebHost CreateHostBuilder(string[] args)
+    {
+        return WebHost.CreateDefaultBuilder(args)
+                .UseStartup<Startup>()
+                .UseWebRoot("Pics")
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .Build();
+    }
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
