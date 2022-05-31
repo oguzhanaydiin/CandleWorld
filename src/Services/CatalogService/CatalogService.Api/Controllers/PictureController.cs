@@ -45,7 +45,7 @@ public class PicController : ControllerBase
             var path = Path.Combine(webRoot, item.PictureFileName);
 
             string imageFileExtension = Path.GetExtension(item.PictureFileName);
-            string mimetype = GetImageMimeTypeFromImageFileExtension(imageFileExtension);
+            string mimetype = $"image/{imageFileExtension.Trim('.')}";
 
             var buffer = await System.IO.File.ReadAllBytesAsync(path);
 
@@ -55,42 +55,4 @@ public class PicController : ControllerBase
         return NotFound();
     }
 
-    private string GetImageMimeTypeFromImageFileExtension(string extension)
-    {
-        string mimetype;
-
-        switch (extension)
-        {
-            case ".png":
-                mimetype = "image/png";
-                break;
-            case ".gif":
-                mimetype = "image/gif";
-                break;
-            case ".jpg":
-            case ".jpeg":
-                mimetype = "image/jpeg";
-                break;
-            case ".bmp":
-                mimetype = "image/bmp";
-                break;
-            case ".tiff":
-                mimetype = "image/tiff";
-                break;
-            case ".wmf":
-                mimetype = "image/wmf";
-                break;
-            case ".jp2":
-                mimetype = "image/jp2";
-                break;
-            case ".svg":
-                mimetype = "image/svg+xml";
-                break;
-            default:
-                mimetype = "application/octet-stream";
-                break;
-        }
-
-        return mimetype;
-    }
 }
