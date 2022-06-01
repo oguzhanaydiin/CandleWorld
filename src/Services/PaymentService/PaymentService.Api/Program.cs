@@ -27,7 +27,6 @@ builder.Services.AddSingleton<IEventBus>(sp =>
     {
         ConnectionRetryCount = 5,
         EventNameSuffix = "IntegrationEvent",
-        DefaultTopicName = "CandleWorldTopicName",
         SubscriberClientAppName = "PaymentService",
         EventBusType = EventBusType.RabbitMQ
     };
