@@ -3,7 +3,6 @@ using EventBus.Base.Abstraction;
 using EventBus.Factory;
 using PaymentService.Api.IntegrationEvents.EventHandlers;
 using PaymentService.Api.IntegrationEvents.Events;
-using RabbitMQ.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
