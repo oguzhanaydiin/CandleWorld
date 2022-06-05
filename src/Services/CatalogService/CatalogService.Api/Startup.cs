@@ -23,10 +23,12 @@ public class Startup
 
         services.Configure<CatalogSettings>(Configuration.GetSection("CatalogSettings"));
         services.ConfigureDbContext(Configuration);
+
+        services.ConfigureConsul(Configuration);
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime lifetime)
     {
         if (env.IsDevelopment())
         {
@@ -41,5 +43,7 @@ public class Startup
         {
             endpoints.MapControllers();
         });
+
+        app.RegisterWithConsul(lifetime);
     }
 }
