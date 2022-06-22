@@ -1,25 +1,45 @@
-var builder = WebApplication.CreateBuilder(args);
+using Microsoft.AspNetCore;
+using OrderService.Api.Extensions;
+using OrderService.Infrastructure.Context;
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+namespace OrderService.Api
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            var host = BuildWebHost(GetConfiguration(), args);
+
+            host.MigrateDbContext<OrderDbContext>((context, services) =>
+            {
+                var logger = services.GetService<ILogger<OrderDbContext>>();
+
+                var dbContextSeeder = new OrderDbContextSeed();
+                dbContextSeeder.SeedAsync(context, logger)
+                    .Wait();
+            });
+
+        }
+
+        static IWebHost BuildWebHost(IConfiguration configuration, string[] args) =>
+            WebHost.CreateDefaultBuilder(args)
+                .UseDefaultServiceProvider((context, options) =>
+                {
+                    options.ValidateOnBuild = false;
+                })
+            .ConfigureAppConfiguration(i => i.AddConfiguration(configuration))
+            .UseStartup<Startup>()
+            .Build();
+
+
+        static IConfiguration GetConfiguration()
+        {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddEnvironmentVariables();
+
+            return builder.Build();
+        }
+    }
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();

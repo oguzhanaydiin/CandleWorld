@@ -34,6 +34,7 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, boo
 
         var orderStartedIntegrationEvent = new OrderStartedIntegrationEvent(request.UserName);
 
+        //burada orderStartedIntegrationEvent'i tetiklemek icin rabbite publish ediyoruz
         eventBus.Publish(orderStartedIntegrationEvent);
 
         return true;
