@@ -1,7 +1,6 @@
 ﻿using IdentityService.Api.Application.Services;
-using IdentityService.Api.Extensions.Registiration;
+using IdentityService.Api.Extensions.Registration;
 using Microsoft.OpenApi.Models;
-
 namespace IdentityService.Api
 {
     public class Startup
