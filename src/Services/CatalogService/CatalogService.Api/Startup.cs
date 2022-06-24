@@ -1,6 +1,7 @@
 ﻿
 using CatalogService.Api.Extensions;
 using CatalogService.Api.Infrastructure;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.OpenApi.Models;
 
 namespace CatalogService.Api;
@@ -37,6 +38,13 @@ public class Startup
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CatalogService.Api v1"));
         }
         app.UseHttpsRedirection();
+
+        app.UseStaticFiles(new StaticFileOptions()
+        {
+            FileProvider = new PhysicalFileProvider(System.IO.Path.Combine(env.ContentRootPath, "Pics")),
+            RequestPath = "/pics"
+        });
+
         app.UseRouting();
         app.UseAuthorization();
         app.UseEndpoints(endpoints =>
