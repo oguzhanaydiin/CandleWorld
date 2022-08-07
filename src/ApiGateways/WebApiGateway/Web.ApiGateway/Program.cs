@@ -1,12 +1,19 @@
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 using Ocelot.Provider.Consul;
+using Web.ApiGateway.Infrastructure;
+using Web.ApiGateway.Services;
+using Web.ApiGateway.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration.AddJsonFile("configurations/ocelot.json");
 
 builder.Services.AddOcelot().AddConsul();
+
+builder.Services.AddScoped<ICatalogService, CatalogService>();
+builder.Services.AddScoped<IBasketService, BasketService>();
+
 
 // Add services to the container.
 builder.Services.AddCors(options =>
@@ -17,6 +24,21 @@ builder.Services.AddCors(options =>
     .AllowAnyHeader()
     .AllowCredentials());
 });
+
+//creating http client access point
+builder.Services.AddSingleton<IHttpContextAccessor>();
+
+builder.Services.AddHttpClient("basket", c =>
+{
+    c.BaseAddress = new Uri(builder.Configuration["urls:basket"]);
+})
+    .AddHttpMessageHandler<HttpClientDelegatingHandler>();
+
+builder.Services.AddHttpClient("catalog", c =>
+{
+    c.BaseAddress = new Uri(builder.Configuration["urls:catalog"]);
+})
+    .AddHttpMessageHandler<HttpClientDelegatingHandler>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

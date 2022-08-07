@@ -19,7 +19,7 @@ public class IdentityService : IIdentityService
         this.authStateProvider = authStateProvider;
     }
 
-    public bool IsLoogedIn => !string.IsNullOrEmpty(GetUserToken());
+    public bool IsLoggedIn => !string.IsNullOrEmpty(GetUserToken());
 
     public string GetUserName()
     {
